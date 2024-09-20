@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "ColorRamp",
+	"Description": "This plugin adds a new material node that allows for smooth blending of multiple color values. The node lets you define key points with specific colors and control their distribution to create various gradients.",
+	"Category": "Other",
+	"CreatedBy": "MoxAlehin",
+	"CreatedByURL": "https://github.com/MoxAlehin",
+	"DocsURL": "https://github.com/MoxAlehin/ColorRamp",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "ColorRamp",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
