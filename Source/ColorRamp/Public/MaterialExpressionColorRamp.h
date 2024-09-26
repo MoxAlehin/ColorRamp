@@ -5,7 +5,7 @@
 #include "MaterialExpressionColorRamp.generated.h"
 
 UENUM()
-enum class EInterpolationType : uint8
+enum EInterpolationType : int
 {
     Constant,
     Linear,
@@ -36,12 +36,19 @@ struct FColorRampPoint
         : Color(InColor), Position(InPosition), DefaultColor(InDefaultColor), DefaultPosition(InDefaultPosition) {}
 };
 
-UCLASS(collapsecategories, hidecategories = Object, MinimalAPI)
+UCLASS(CollapseCategories, HideCategories = Object, MinimalAPI)
 class UMaterialExpressionColorRamp : public UMaterialExpression
 {
     GENERATED_UCLASS_BODY()
 
 public:
+
+    UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (DisplayName = "Interpolation Type", ShowAsInputPin = "Advanced"))
+    TEnumAsByte<enum EInterpolationType> InterpolationType;
+
+    UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (DisplayName = "Show Points", ShowAsInputPin = "Advanced"))
+    bool bShowPoints;
+    
     UPROPERTY(meta = (RequiredInput = "false", ToolTip = "Defaults to 'ConstAlpha' if not specified"))
     FExpressionInput Alpha;
 
@@ -50,9 +57,6 @@ public:
 
     UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp")
     TArray<FColorRampPoint> ColorPoints;
-
-    UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp")
-    EInterpolationType InterpolationType;
 
 #if WITH_EDITOR
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
@@ -67,5 +71,5 @@ public:
     virtual uint32 GetInputType(int32 InputIndex) override { return MCT_Float; }
 
 private:
-    int32 ApplyEaseInOutInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 PrevPositionIndex, int32 PositionIndex);
+    static int32 ApplyEaseInOutInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 PrevPositionIndex, int32 PositionIndex);
 };

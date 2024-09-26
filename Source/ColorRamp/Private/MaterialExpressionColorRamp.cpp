@@ -2,7 +2,8 @@
 #include "MaterialCompiler.h"
 
 UMaterialExpressionColorRamp::UMaterialExpressionColorRamp(const FObjectInitializer& ObjectInitializer)
-    : Super(ObjectInitializer), ConstAlpha(1.0f), InterpolationType(EInterpolationType::Linear)
+    : Super(ObjectInitializer), ConstAlpha(1.0f), bShowPoints(false),
+      InterpolationType(EInterpolationType::Linear)
 {
     ColorPoints.Add(FColorRampPoint(FExpressionInput(), FExpressionInput(), FLinearColor::Black, 0.0f));
     ColorPoints.Add(FColorRampPoint(FExpressionInput(), FExpressionInput(), FLinearColor::White, 1.0f));
@@ -35,7 +36,7 @@ int32 UMaterialExpressionColorRamp::Compile(FMaterialCompiler* Compiler, int32 O
             switch (InterpolationType)
             {
                 case EInterpolationType::Constant:
-                    LerpAlpha = Compiler->Step(PositionIndex, AlphaIndex); // Step function for constant interpolation
+                    LerpAlpha = Compiler->Step(PositionIndex, AlphaIndex);
                     break;
                 case EInterpolationType::Linear:
                     LerpAlpha = Compiler->Div(Compiler->Sub(AlphaIndex, PrevPositionIndex), Compiler->Sub(PositionIndex, PrevPositionIndex));
@@ -72,13 +73,19 @@ void UMaterialExpressionColorRamp::GetCaption(TArray<FString>& OutCaptions) cons
 TArrayView<FExpressionInput*> UMaterialExpressionColorRamp::GetInputsView()
 {
     CachedInputs.Empty();
-    CachedInputs.Reserve(1 + ColorPoints.Num() * 2);
+    CachedInputs.Reserve(1 + (bShowPoints ? ColorPoints.Num() * 2 : ColorPoints.Num()));
+    
     CachedInputs.Add(&Alpha);
+    
     for (FColorRampPoint& Point : ColorPoints)
     {
-        CachedInputs.Add(&Point.Color);
-        CachedInputs.Add(&Point.Position);
+        if (bShowPoints)
+        {
+            CachedInputs.Add(&Point.Color);
+            CachedInputs.Add(&Point.Position);
+        }
     }
+    
     return CachedInputs;
 }
 
@@ -130,7 +137,8 @@ void UMaterialExpressionColorRamp::PostEditChangeProperty(FPropertyChangedEvent&
     RebuildOutputs();
 
     if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, ColorPoints) ||
-        PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, InterpolationType))
+        PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, InterpolationType) ||
+        PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_STRING_CHECKED(UMaterialExpressionColorRamp, bShowPoints))
     {
         if (GraphNode)
         {
