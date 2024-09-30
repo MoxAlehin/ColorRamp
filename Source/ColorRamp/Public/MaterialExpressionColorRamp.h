@@ -16,9 +16,9 @@ UENUM()
 enum EPinType : uint8
 {
     HidePins,
-    HideDistributed UMETA(DisplayName="Hide Pins (Distributed)"),
+    HidePinsDistributed UMETA(DisplayName="Hide Pins (Distributed)"),
     ShowColorPins,
-    ShowColorDistributed UMETA(DisplayName="Show Color Pins (Distributed)"),
+    ShowColorPinsDistributed UMETA(DisplayName="Show Color Pins (Distributed)"),
     ShowPositionPins,
     ShowAllPinsAlternate UMETA(DisplayName="Show All Pins (Alternate)"),
     ShowAllPinsGroup UMETA(DisplayName="Show All Pins (Group)")

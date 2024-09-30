@@ -20,7 +20,7 @@ int32 UMaterialExpressionColorRamp::Compile(FMaterialCompiler* Compiler, int32 O
         return Compiler->Errorf(TEXT("Color points are missing"));
     }
 
-    if (PinType == EPinType::HideDistributed || PinType == EPinType::ShowColorDistributed)
+    if (PinType == EPinType::HidePinsDistributed || PinType == EPinType::ShowColorPinsDistributed)
     {
         for (int32 i = 0; i < ColorPoints.Num(); ++i)
         {
@@ -87,7 +87,7 @@ TArrayView<FExpressionInput*> UMaterialExpressionColorRamp::GetInputsView()
 
     switch (PinType)
     {
-    case EPinType::ShowColorDistributed:
+    case EPinType::ShowColorPinsDistributed:
     case EPinType::ShowColorPins:
         for (FColorRampPoint& Point : ColorPoints)
         {
@@ -137,7 +137,7 @@ FExpressionInput* UMaterialExpressionColorRamp::GetInput(int32 InputIndex)
     int32 PointIndex;
     switch (PinType)
     {
-    case EPinType::ShowColorDistributed:
+    case EPinType::ShowColorPinsDistributed:
     case EPinType::ShowColorPins:
         PointIndex = InputIndex - 1;
         if (PointIndex >= 0 && PointIndex < ColorPoints.Num())
@@ -197,7 +197,7 @@ FName UMaterialExpressionColorRamp::GetInputName(int32 InputIndex) const
     int32 PointIndex;
     switch (PinType)
     {
-        case EPinType::ShowColorDistributed:
+        case EPinType::ShowColorPinsDistributed:
         case EPinType::ShowColorPins:
             PointIndex = InputIndex - 1;
             if (PointIndex >= 0 && PointIndex < ColorPoints.Num())
@@ -251,6 +251,29 @@ FName UMaterialExpressionColorRamp::GetInputName(int32 InputIndex) const
 void UMaterialExpressionColorRamp::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
     RebuildOutputs();
+
+    if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, PinType))
+    {
+        if (PinType == EPinType::HidePins || 
+            PinType == EPinType::ShowPositionPins ||
+            PinType == EPinType::HidePinsDistributed)
+        {
+            for (FColorRampPoint& Point : ColorPoints)
+            {
+                Point.Color.Expression = nullptr;
+            }
+        }
+        if (PinType == EPinType::HidePins || 
+            PinType == EPinType::HidePinsDistributed ||
+            PinType == EPinType::ShowColorPinsDistributed ||
+            PinType == EPinType::ShowColorPins)
+        {
+            for (FColorRampPoint& Point : ColorPoints)
+            {
+                Point.Position.Expression = nullptr;
+            }
+        }
+    }
 
     if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, ColorPoints) ||
         PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, InterpolationType) ||
