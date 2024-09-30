@@ -13,10 +13,12 @@ enum EInterpolationType : uint8
 };
 
 UENUM()
-enum EPointPinVisibility : uint8
+enum EPinType : uint8
 {
     HidePins,
+    HideDistributed UMETA(DisplayName="Hide Pins (Distributed)"),
     ShowColorPins,
+    ShowColorDistributed UMETA(DisplayName="Show Color Pins (Distributed)"),
     ShowPositionPins,
     ShowAllPinsAlternate UMETA(DisplayName="Show All Pins (Alternate)"),
     ShowAllPinsGroup UMETA(DisplayName="Show All Pins (Group)")
@@ -62,8 +64,8 @@ public:
     UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (DisplayName = "Interpolation Type", ShowAsInputPin = "Advanced"))
     TEnumAsByte<enum EInterpolationType> InterpolationType;
 
-    UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (DisplayName = "Point Pin Visibility", ShowAsInputPin = "Advanced"))
-    TEnumAsByte<enum EPointPinVisibility> PointPinVisibility;
+    UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (DisplayName = "Pin Type", ShowAsInputPin = "Advanced"))
+    TEnumAsByte<enum EPinType> PinType;
 
     UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp")
     TArray<FColorRampPoint> ColorPoints;
