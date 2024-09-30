@@ -5,11 +5,21 @@
 #include "MaterialExpressionColorRamp.generated.h"
 
 UENUM()
-enum EInterpolationType : int
+enum EInterpolationType : uint8
 {
     Constant,
     Linear,
     Ease
+};
+
+UENUM()
+enum EPointPinVisibility : uint8
+{
+    HidePins,
+    ShowColorPins,
+    ShowPositionPins,
+    ShowAllPinsAlternate UMETA(DisplayName="Show All Pins (Alternate)"),
+    ShowAllPinsGroup UMETA(DisplayName="Show All Pins (Group)")
 };
 
 USTRUCT()
@@ -43,17 +53,17 @@ class UMaterialExpressionColorRamp : public UMaterialExpression
 
 public:
 
-    UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (DisplayName = "Interpolation Type", ShowAsInputPin = "Advanced"))
-    TEnumAsByte<enum EInterpolationType> InterpolationType;
-
-    UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (DisplayName = "Show Points", ShowAsInputPin = "Advanced"))
-    bool bShowPoints;
-    
     UPROPERTY(meta = (RequiredInput = "false", ToolTip = "Defaults to 'ConstAlpha' if not specified"))
     FExpressionInput Alpha;
 
     UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (OverridingInputProperty = "Alpha", UIMin = "0.0", UIMax = "1.0"))
     float ConstAlpha;
+
+    UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (DisplayName = "Interpolation Type", ShowAsInputPin = "Advanced"))
+    TEnumAsByte<enum EInterpolationType> InterpolationType;
+
+    UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp", meta = (DisplayName = "Point Pin Visibility", ShowAsInputPin = "Advanced"))
+    TEnumAsByte<enum EPointPinVisibility> PointPinVisibility;
 
     UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp")
     TArray<FColorRampPoint> ColorPoints;

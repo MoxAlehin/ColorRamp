@@ -2,8 +2,10 @@
 #include "MaterialCompiler.h"
 
 UMaterialExpressionColorRamp::UMaterialExpressionColorRamp(const FObjectInitializer& ObjectInitializer)
-    : Super(ObjectInitializer), ConstAlpha(1.0f), bShowPoints(false),
-      InterpolationType(EInterpolationType::Linear)
+    :   Super(ObjectInitializer),
+        ConstAlpha(1.0f), 
+        InterpolationType(EInterpolationType::Linear),
+        PointPinVisibility(EPointPinVisibility::HidePins)
 {
     ColorPoints.Add(FColorRampPoint(FExpressionInput(), FExpressionInput(), FLinearColor::Black, 0.0f));
     ColorPoints.Add(FColorRampPoint(FExpressionInput(), FExpressionInput(), FLinearColor::White, 1.0f));
@@ -73,62 +75,165 @@ void UMaterialExpressionColorRamp::GetCaption(TArray<FString>& OutCaptions) cons
 TArrayView<FExpressionInput*> UMaterialExpressionColorRamp::GetInputsView()
 {
     CachedInputs.Empty();
-    CachedInputs.Reserve(1 + (bShowPoints ? ColorPoints.Num() * 2 : ColorPoints.Num()));
-    
     CachedInputs.Add(&Alpha);
-    
-    for (FColorRampPoint& Point : ColorPoints)
+
+    switch (PointPinVisibility)
     {
-        if (bShowPoints)
+    case EPointPinVisibility::ShowColorPins:
+        for (FColorRampPoint& Point : ColorPoints)
+        {
+            CachedInputs.Add(&Point.Color);
+        }
+        break;
+
+    case EPointPinVisibility::ShowPositionPins:
+        for (FColorRampPoint& Point : ColorPoints)
+        {
+            CachedInputs.Add(&Point.Position);
+        }
+        break;
+
+    case EPointPinVisibility::ShowAllPinsGroup:
+        for (FColorRampPoint& Point : ColorPoints)
+        {
+            CachedInputs.Add(&Point.Color);
+        }
+        for (FColorRampPoint& Point : ColorPoints)
+        {
+            CachedInputs.Add(&Point.Position);
+        }
+        break;
+
+    case EPointPinVisibility::ShowAllPinsAlternate:
+        for (FColorRampPoint& Point : ColorPoints)
         {
             CachedInputs.Add(&Point.Color);
             CachedInputs.Add(&Point.Position);
         }
+        break;
+    default:
+        break;
     }
-    
+
     return CachedInputs;
 }
 
 FExpressionInput* UMaterialExpressionColorRamp::GetInput(int32 InputIndex)
 {
-    if (InputIndex < 0 || InputIndex >= 1 + ColorPoints.Num() * 2)
-    {
-        return nullptr;
-    }
     if (InputIndex == 0)
     {
         return &Alpha;
     }
-    int32 PointIndex = (InputIndex - 1) / 2;
-    if ((InputIndex - 1) % 2 == 0)
+
+    int32 PointIndex;
+    switch (PointPinVisibility)
     {
-        return &ColorPoints[PointIndex].Color;
+    case EPointPinVisibility::ShowColorPins:
+        PointIndex = InputIndex - 1;
+        if (PointIndex >= 0 && PointIndex < ColorPoints.Num())
+        {
+            return &ColorPoints[PointIndex].Color;
+        }
+        break;
+
+    case EPointPinVisibility::ShowPositionPins:
+        PointIndex = InputIndex - 1;
+        if (PointIndex >= 0 && PointIndex < ColorPoints.Num())
+        {
+            return &ColorPoints[PointIndex].Position;
+        }
+        break;
+
+    case EPointPinVisibility::ShowAllPinsAlternate:
+        PointIndex = (InputIndex - 1) / 2;
+        if (PointIndex >= 0 && PointIndex < ColorPoints.Num())
+        {
+            if ((InputIndex - 1) % 2 == 0)
+            {
+                return &ColorPoints[PointIndex].Color;
+            }
+            else
+            {
+                return &ColorPoints[PointIndex].Position;
+            }
+        }
+        break;
+
+    case EPointPinVisibility::ShowAllPinsGroup:
+        if (InputIndex - 1 < ColorPoints.Num())
+        {
+            return &ColorPoints[InputIndex - 1].Color;
+        }
+        else if (InputIndex - 1 < ColorPoints.Num() * 2)
+        {
+            return &ColorPoints[InputIndex - 1 - ColorPoints.Num()].Position;
+        }
+        break;
+
+    default:
+        break;
     }
-    else
-    {
-        return &ColorPoints[PointIndex].Position;
-    }
+
+    return nullptr;
 }
 
 FName UMaterialExpressionColorRamp::GetInputName(int32 InputIndex) const
 {
-    if (InputIndex < 0 || InputIndex >= 1 + ColorPoints.Num() * 2)
-    {
-        return NAME_None;
-    }
     if (InputIndex == 0)
     {
-        return GET_MEMBER_NAME_STRING_CHECKED(UMaterialExpressionColorRamp, Alpha);
+        return GET_MEMBER_NAME_STRING_CHECKED(UMaterialExpressionColorRamp, Alpha);  // Первый вход всегда Alpha
     }
-    int32 PointIndex = (InputIndex - 1) / 2;
-    if ((InputIndex - 1) % 2 == 0)
+
+    int32 PointIndex;
+    switch (PointPinVisibility)
     {
-        return FName(*FString::Printf(TEXT("Color %d"), PointIndex));
+        case EPointPinVisibility::ShowColorPins:
+            PointIndex = InputIndex - 1;
+            if (PointIndex >= 0 && PointIndex < ColorPoints.Num())
+            {
+                return FName(*FString::Printf(TEXT("Color %d"), PointIndex));
+            }
+            break;
+
+        case EPointPinVisibility::ShowPositionPins:
+            PointIndex = InputIndex - 1;
+            if (PointIndex >= 0 && PointIndex < ColorPoints.Num())
+            {
+                return FName(*FString::Printf(TEXT("Position %d"), PointIndex));
+            }
+            break;
+
+        case EPointPinVisibility::ShowAllPinsAlternate:
+            PointIndex = (InputIndex - 1) / 2;
+            if (PointIndex >= 0 && PointIndex < ColorPoints.Num())
+            {
+                if ((InputIndex - 1) % 2 == 0)
+                {
+                    return FName(*FString::Printf(TEXT("Color %d"), PointIndex));
+                }
+                else
+                {
+                    return FName(*FString::Printf(TEXT("Position %d"), PointIndex));
+                }
+            }
+            break;
+
+        case EPointPinVisibility::ShowAllPinsGroup:
+            if (InputIndex - 1 < ColorPoints.Num())
+            {
+                return FName(*FString::Printf(TEXT("Color %d"), InputIndex - 1));
+            }
+            else if (InputIndex - 1 < ColorPoints.Num() * 2)
+            {
+                return FName(*FString::Printf(TEXT("Position %d"), InputIndex - 1 - ColorPoints.Num()));
+            }
+            break;
+
+        default:
+            break;
     }
-    else
-    {
-        return FName(*FString::Printf(TEXT("Position %d"), PointIndex));
-    }
+
+    return NAME_None;
 }
 
 #if WITH_EDITOR
@@ -138,7 +243,7 @@ void UMaterialExpressionColorRamp::PostEditChangeProperty(FPropertyChangedEvent&
 
     if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, ColorPoints) ||
         PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, InterpolationType) ||
-        PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_STRING_CHECKED(UMaterialExpressionColorRamp, bShowPoints))
+        PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, PointPinVisibility))
     {
         if (GraphNode)
         {
