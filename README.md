@@ -1,6 +1,6 @@
 # Color Ramp
 
-Color Ramp is a powerful Unreal Engine 5 custom material expression that allows you to create smooth transitions between multiple color points based on defined positions, using various interpolation methods. Additionally, this node provides flexible pin configuration options, including distributed position management for automatic spacing of points.
+Color Ramp is a powerful Unreal Engine custom material expression that allows you to create smooth transitions between multiple color points based on defined positions, using various interpolation methods. Additionally, this node provides flexible pin configuration options, including distributed position management for automatic spacing of points.
 
 ![ColorNode](Images/ColorNode.gif)
 
@@ -31,6 +31,8 @@ To create a multi-color transition with custom position values, use `ShowAllPins
 ![ColorRampNode_AppleAnimation](Images/ColorRampNode_AppleAnimation.gif)
 
 ![ColorRampNode_AppleAnimation_Graph](Images/ColorRampNode_AppleAnimation_Graph.png)
+
+World Position Offsets in this example are baked into multiple UV channels in the model.
 
 ### Height based transitions
 
