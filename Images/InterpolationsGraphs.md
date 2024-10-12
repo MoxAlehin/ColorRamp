@@ -49,6 +49,14 @@ c2e85b7fca13f301b725f135471f9c5065091a1d: [[Ease.jpg]]
 
 2e7c27e64a635168917cb1f25d10342c7673190f: [[Constant.jpg]]
 
+795bb870a9d2da1ae87cd3fc775909c75f95868f: [[ColorRampNode_AppleAnimation_Graph.png]]
+
+c1c6734fff58ed63a4d7cb9270729e931378f5f5: [[ColorRamp_Rainbow.png]]
+
+4f81cf23976e60878ca4e0829d90475ad89cf5c8: [[ColorRampNode_Rainbow_Details.png]]
+
+b3cfe2e699013e8cc8becaac0feb81fede5e6d70: [[ColorRampNode_Rainbow_Graph.png]]
+
 ## Drawing
 ```json
 {
@@ -1605,6 +1613,174 @@ c2e85b7fca13f301b725f135471f9c5065091a1d: [[Ease.jpg]]
 					-329.6627145184708
 				]
 			]
+		},
+		{
+			"type": "image",
+			"version": 193,
+			"versionNonce": 1544493388,
+			"index": "b0l",
+			"isDeleted": false,
+			"id": "v2Vb78iv",
+			"fillStyle": "hachure",
+			"strokeWidth": 1,
+			"strokeStyle": "solid",
+			"roughness": 1,
+			"opacity": 100,
+			"angle": 0,
+			"x": -1806.2393252965508,
+			"y": 1060.7962510832128,
+			"strokeColor": "transparent",
+			"backgroundColor": "transparent",
+			"width": 1117.4294136000353,
+			"height": 346.95143383351353,
+			"seed": 39140,
+			"groupIds": [],
+			"frameId": null,
+			"roundness": null,
+			"boundElements": [],
+			"updated": 1728745169163,
+			"link": null,
+			"locked": false,
+			"status": "pending",
+			"fileId": "795bb870a9d2da1ae87cd3fc775909c75f95868f",
+			"scale": [
+				1,
+				1
+			]
+		},
+		{
+			"type": "image",
+			"version": 160,
+			"versionNonce": 252273268,
+			"index": "b0o",
+			"isDeleted": false,
+			"id": "EtNdEbnR",
+			"fillStyle": "hachure",
+			"strokeWidth": 1,
+			"strokeStyle": "solid",
+			"roughness": 1,
+			"opacity": 100,
+			"angle": 0,
+			"x": 1099.336452950346,
+			"y": 1136.1278944587234,
+			"strokeColor": "transparent",
+			"backgroundColor": "transparent",
+			"width": 433,
+			"height": 433,
+			"seed": 61971,
+			"groupIds": [],
+			"frameId": null,
+			"roundness": null,
+			"boundElements": [],
+			"updated": 1728745341106,
+			"link": null,
+			"locked": false,
+			"status": "pending",
+			"fileId": "c1c6734fff58ed63a4d7cb9270729e931378f5f5",
+			"scale": [
+				1,
+				1
+			]
+		},
+		{
+			"type": "image",
+			"version": 327,
+			"versionNonce": 1985211124,
+			"index": "b0p",
+			"isDeleted": false,
+			"id": "g77BOChm",
+			"fillStyle": "hachure",
+			"strokeWidth": 1,
+			"strokeStyle": "solid",
+			"roughness": 1,
+			"opacity": 100,
+			"angle": 0,
+			"x": 1553.4562604136001,
+			"y": 1136.1278936587455,
+			"strokeColor": "transparent",
+			"backgroundColor": "transparent",
+			"width": 381.42006299652826,
+			"height": 433.00000034125446,
+			"seed": 26504,
+			"groupIds": [],
+			"frameId": null,
+			"roundness": null,
+			"boundElements": [],
+			"updated": 1728745351625,
+			"link": null,
+			"locked": false,
+			"status": "pending",
+			"fileId": "4f81cf23976e60878ca4e0829d90475ad89cf5c8",
+			"scale": [
+				1,
+				1
+			]
+		},
+		{
+			"type": "image",
+			"version": 586,
+			"versionNonce": 1788662004,
+			"index": "b0q",
+			"isDeleted": false,
+			"id": "p4fTTn6G",
+			"fillStyle": "hachure",
+			"strokeWidth": 1,
+			"strokeStyle": "solid",
+			"roughness": 1,
+			"opacity": 100,
+			"angle": 0,
+			"x": 1099.3364529166338,
+			"y": 914.4035176930753,
+			"strokeColor": "transparent",
+			"backgroundColor": "transparent",
+			"width": 835.5398700833659,
+			"height": 198.0538951308719,
+			"seed": 98171,
+			"groupIds": [],
+			"frameId": null,
+			"roundness": null,
+			"boundElements": [],
+			"updated": 1728745352875,
+			"link": null,
+			"locked": false,
+			"status": "pending",
+			"fileId": "b3cfe2e699013e8cc8becaac0feb81fede5e6d70",
+			"scale": [
+				1,
+				1
+			]
+		},
+		{
+			"id": "iYSHePMZ",
+			"type": "image",
+			"x": -377.67323243052897,
+			"y": 1072.3371627686204,
+			"width": 499.99999999999994,
+			"height": 323.86961093585694,
+			"angle": 0,
+			"strokeColor": "transparent",
+			"backgroundColor": "transparent",
+			"fillStyle": "hachure",
+			"strokeWidth": 1,
+			"strokeStyle": "solid",
+			"roughness": 1,
+			"opacity": 100,
+			"roundness": null,
+			"seed": 30068,
+			"version": 26,
+			"versionNonce": 660351820,
+			"updated": 1728745491547,
+			"isDeleted": true,
+			"groupIds": [],
+			"boundElements": [],
+			"link": null,
+			"locked": false,
+			"fileId": "cfebb366f90c51f2419e239adb9af7b235acc654",
+			"scale": [
+				1,
+				1
+			],
+			"index": "b0r"
 		}
 	],
 	"appState": {
@@ -1623,10 +1799,10 @@ c2e85b7fca13f301b725f135471f9c5065091a1d: [[Ease.jpg]]
 		"currentItemStartArrowhead": null,
 		"currentItemEndArrowhead": "arrow",
 		"currentItemArrowType": "round",
-		"scrollX": 366.3128871046371,
-		"scrollY": -11.473937973830749,
+		"scrollX": 1904.6913964801222,
+		"scrollY": 303.42265089920124,
 		"zoom": {
-			"value": 0.969511
+			"value": 0.381283
 		},
 		"currentItemRoundness": "round",
 		"gridSize": 20,
@@ -1643,7 +1819,7 @@ c2e85b7fca13f301b725f135471f9c5065091a1d: [[Ease.jpg]]
 			"name": true,
 			"outline": true
 		},
-		"objectsSnapModeEnabled": false,
+		"objectsSnapModeEnabled": true,
 		"activeTool": {
 			"type": "selection",
 			"customType": null,

@@ -6,25 +6,12 @@ public class ColorRamp : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
-		PublicIncludePaths.AddRange(
-			new string[] {
-			}
-			);
-				
-		
-		PrivateIncludePaths.AddRange(
-			new string[] {
-			}
-			);
-			
-		
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"Core",
 			}
-			);
-			
+		);
 		
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
@@ -34,14 +21,6 @@ public class ColorRamp : ModuleRules
 				"Slate",
 				"SlateCore",
 			}
-			);
-		
-		
-		DynamicallyLoadedModuleNames.AddRange(
-			new string[]
-			{
-                
-			}
-			);
+		);
 	}
 }

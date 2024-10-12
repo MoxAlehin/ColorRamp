@@ -1,3 +1,5 @@
+// Copyright MoxAlehin. All Rights Reserved.
+
 #pragma once
 
 #include "CoreMinimal.h"

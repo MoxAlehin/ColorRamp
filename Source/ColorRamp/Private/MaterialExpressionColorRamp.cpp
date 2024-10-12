@@ -1,5 +1,9 @@
+// Copyright MoxAlehin. All Rights Reserved.
+
 #include "MaterialExpressionColorRamp.h"
 #include "MaterialCompiler.h"
+
+#define LOCTEXT_NAMESPACE "MaterialExpression"
 
 UMaterialExpressionColorRamp::UMaterialExpressionColorRamp(const FObjectInitializer& ObjectInitializer)
     :   Super(ObjectInitializer),
@@ -9,6 +13,7 @@ UMaterialExpressionColorRamp::UMaterialExpressionColorRamp(const FObjectInitiali
 {
     ColorPoints.Add(FColorRampPoint(FExpressionInput(), FExpressionInput(), FLinearColor::Black, 0.0f));
     ColorPoints.Add(FColorRampPoint(FExpressionInput(), FExpressionInput(), FLinearColor::White, 1.0f));
+    MenuCategories.Add(LOCTEXT( "Gradient", "Gradient" ));
 }
 
 int32 UMaterialExpressionColorRamp::Compile(FMaterialCompiler* Compiler, int32 OutputIndex)
@@ -295,3 +300,5 @@ void UMaterialExpressionColorRamp::RebuildOutputs()
     Outputs.Add(FExpressionOutput(TEXT("")));
 }
 #endif
+
+#undef LOCTEXT_NAMESPACE
