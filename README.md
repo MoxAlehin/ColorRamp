@@ -61,3 +61,4 @@ Each color point in the ramp has customizable default values for both color and 
 
 In modes like `Hide Pins (Distributed)` and `Show Color Pins (Distributed)`, the positions of the color points are automatically distributed evenly between 0 and 1. This feature is useful for creating smooth, evenly spaced gradients without the need for manual position adjustments. In other modes, such as `Show Position Pins` or `Show All Pins`, you can manually specify the position of each color point for finer control over the gradient's shape.
 
+For predictable behavior, the positions of the points need to follow one another, meaning the position of each subsequent point must be greater than the previous one.
