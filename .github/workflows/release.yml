@@ -1,0 +1,39 @@
+name: Prepare Release for Plugin
+
+on:
+  release:
+    types: [published]  # Trigger when a release is published
+
+jobs:
+  prepare_release:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository code
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Set a variable with the repository name
+    - name: Set name variable
+      run: echo "NAME=$(basename ${{ github.repository }})" >> $GITHUB_ENV
+
+    # Create a new directory with the repository name and move necessary files into it
+    - name: Prepare release directory
+      run: |
+        mkdir $NAME
+        cp    *.uplugin $NAME/
+        cp -r Source    $NAME/
+        cp -r Resources $NAME/
+
+    # Create a ZIP archive of the directory with the required files
+    - name: Zip release
+      run: zip -r $NAME-${{ github.event.release.tag_name }}.zip $NAME
+
+    # Upload the ZIP archive as a release asset
+    - name: Upload release archive
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file:       ${{ env.NAME }}-${{ github.event.release.tag_name }}.zip
+        asset_name: ${{ env.NAME }}-${{ github.event.release.tag_name }}.zip
+        tag:        ${{ github.event.release.tag_name }}
