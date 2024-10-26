@@ -55,8 +55,6 @@ class UMaterialExpressionColorRamp : public UMaterialExpression
 {
     GENERATED_UCLASS_BODY()
 
-public:
-
     UPROPERTY(meta = (RequiredInput = "false", ToolTip = "Defaults to 'ConstAlpha' if not specified"))
     FExpressionInput Alpha;
 
@@ -72,18 +70,16 @@ public:
     UPROPERTY(EditAnywhere, Category = "MaterialExpressionColorRamp")
     TArray<FColorRampPoint> ColorPoints;
 
+    void RebuildOutputs();
+    
 #if WITH_EDITOR
     virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-    void RebuildOutputs();
-#endif
-
     virtual int32 Compile(class FMaterialCompiler* Compiler, int32 OutputIndex) override;
     virtual void GetCaption(TArray<FString>& OutCaptions) const override;
     virtual TArrayView<FExpressionInput*> GetInputsView() override;
     virtual FExpressionInput* GetInput(int32 InputIndex) override;
     virtual FName GetInputName(int32 InputIndex) const override;
     virtual uint32 GetInputType(int32 InputIndex) override { return MCT_Float; }
-
-private:
     static int32 ApplyEaseInOutInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 PrevPositionIndex, int32 PositionIndex);
+#endif
 };

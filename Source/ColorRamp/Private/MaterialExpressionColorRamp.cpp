@@ -16,6 +16,15 @@ UMaterialExpressionColorRamp::UMaterialExpressionColorRamp(const FObjectInitiali
     MenuCategories.Add(LOCTEXT( "Gradient", "Gradient" ));
 }
 
+void UMaterialExpressionColorRamp::RebuildOutputs()
+{
+    Outputs.Reset(1);
+    bShowOutputNameOnPin = false;
+    Outputs.Add(FExpressionOutput(TEXT("")));
+}
+
+#if WITH_EDITOR
+
 int32 UMaterialExpressionColorRamp::Compile(FMaterialCompiler* Compiler, int32 OutputIndex)
 {
     int32 AlphaIndex = Alpha.Expression ? Alpha.Compile(Compiler) : Compiler->Constant(ConstAlpha);
@@ -92,41 +101,41 @@ TArrayView<FExpressionInput*> UMaterialExpressionColorRamp::GetInputsView()
 
     switch (PinType)
     {
-    case EPinType::ShowColorPinsDistributed:
-    case EPinType::ShowColorPins:
-        for (FColorRampPoint& Point : ColorPoints)
-        {
-            CachedInputs.Add(&Point.Color);
-        }
-        break;
+        case EPinType::ShowColorPinsDistributed:
+        case EPinType::ShowColorPins:
+            for (FColorRampPoint& Point : ColorPoints)
+            {
+                CachedInputs.Add(&Point.Color);
+            }
+            break;
 
-    case EPinType::ShowPositionPins:
-        for (FColorRampPoint& Point : ColorPoints)
-        {
-            CachedInputs.Add(&Point.Position);
-        }
-        break;
+        case EPinType::ShowPositionPins:
+            for (FColorRampPoint& Point : ColorPoints)
+            {
+                CachedInputs.Add(&Point.Position);
+            }
+            break;
 
-    case EPinType::ShowAllPinsGroup:
-        for (FColorRampPoint& Point : ColorPoints)
-        {
-            CachedInputs.Add(&Point.Color);
-        }
-        for (FColorRampPoint& Point : ColorPoints)
-        {
-            CachedInputs.Add(&Point.Position);
-        }
-        break;
+        case EPinType::ShowAllPinsGroup:
+            for (FColorRampPoint& Point : ColorPoints)
+            {
+                CachedInputs.Add(&Point.Color);
+            }
+            for (FColorRampPoint& Point : ColorPoints)
+            {
+                CachedInputs.Add(&Point.Position);
+            }
+            break;
 
-    case EPinType::ShowAllPinsAlternate:
-        for (FColorRampPoint& Point : ColorPoints)
-        {
-            CachedInputs.Add(&Point.Color);
-            CachedInputs.Add(&Point.Position);
-        }
-        break;
-    default:
-        break;
+        case EPinType::ShowAllPinsAlternate:
+            for (FColorRampPoint& Point : ColorPoints)
+            {
+                CachedInputs.Add(&Point.Color);
+                CachedInputs.Add(&Point.Position);
+            }
+            break;
+        default:
+            break;
     }
 
     return CachedInputs;
@@ -252,7 +261,6 @@ FName UMaterialExpressionColorRamp::GetInputName(int32 InputIndex) const
     return NAME_None;
 }
 
-#if WITH_EDITOR
 void UMaterialExpressionColorRamp::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
     RebuildOutputs();
@@ -293,12 +301,6 @@ void UMaterialExpressionColorRamp::PostEditChangeProperty(FPropertyChangedEvent&
     Super::PostEditChangeProperty(PropertyChangedEvent);
 }
 
-void UMaterialExpressionColorRamp::RebuildOutputs()
-{
-    Outputs.Reset(1);
-    bShowOutputNameOnPin = false;
-    Outputs.Add(FExpressionOutput(TEXT("")));
-}
 #endif
 
 #undef LOCTEXT_NAMESPACE
