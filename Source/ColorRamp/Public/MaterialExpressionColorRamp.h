@@ -11,7 +11,8 @@ enum EInterpolationType : uint8
 {
     Constant,
     Linear,
-    Ease
+    Ease,
+    BSpline UMETA(DisplayName="B-Spline")
 };
 
 UENUM()
@@ -81,5 +82,6 @@ class UMaterialExpressionColorRamp : public UMaterialExpression
     virtual FName GetInputName(int32 InputIndex) const override;
     virtual uint32 GetInputType(int32 InputIndex) override { return MCT_Float; }
     static int32 ApplyEaseInOutInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 PrevPositionIndex, int32 PositionIndex);
+    int32 ApplyBSplineInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 CurrentIndex);
 #endif
 };

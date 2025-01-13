@@ -9,7 +9,7 @@ UMaterialExpressionColorRamp::UMaterialExpressionColorRamp(const FObjectInitiali
     :   Super(ObjectInitializer),
         ConstAlpha(1.0f), 
         InterpolationType(EInterpolationType::Linear),
-        PinType(EPinType::HidePins)
+        PinType(EPinType::HidePinsDistributed)
 {
     ColorPoints.Add(FColorRampPoint(FExpressionInput(), FExpressionInput(), FLinearColor::Black, 0.0f));
     ColorPoints.Add(FColorRampPoint(FExpressionInput(), FExpressionInput(), FLinearColor::White, 1.0f));
@@ -69,6 +69,9 @@ int32 UMaterialExpressionColorRamp::Compile(FMaterialCompiler* Compiler, int32 O
                 case EInterpolationType::Ease:
                     LerpAlpha = ApplyEaseInOutInterpolation(Compiler, AlphaIndex, PrevPositionIndex, PositionIndex);
                     break;
+                case EInterpolationType::BSpline:
+                    LerpAlpha = ApplyBSplineInterpolation(Compiler, AlphaIndex, i);
+                    break;
                 default:
                     LerpAlpha = Compiler->Div(Compiler->Sub(AlphaIndex, PrevPositionIndex), Compiler->Sub(PositionIndex, PrevPositionIndex));
                     LerpAlpha = Compiler->Clamp(LerpAlpha, Compiler->Constant(0.0f), Compiler->Constant(1.0f));
@@ -87,6 +90,34 @@ int32 UMaterialExpressionColorRamp::ApplyEaseInOutInterpolation(FMaterialCompile
     int32 t = Compiler->Div(Compiler->Sub(AlphaIndex, PrevPositionIndex), Compiler->Sub(PositionIndex, PrevPositionIndex));
     int32 easeInOut = Compiler->Sub(Compiler->Mul(t, t), Compiler->Mul(Compiler->Sub(t, Compiler->Constant(1.0f)), Compiler->Sub(t, Compiler->Constant(1.0f))));
     return Compiler->Clamp(easeInOut, Compiler->Constant(0.0f), Compiler->Constant(1.0f));
+}
+
+// Function to apply B-Spline interpolation
+// Ensure there are at least four points for cubic B-Spline
+// if (ColorPoints.Num() < 4)
+// {
+//     return Compiler->Errorf(TEXT("B-Spline interpolation requires at least 4 color points"));
+// }
+
+int32 UMaterialExpressionColorRamp::ApplyBSplineInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 CurrentIndex)
+{
+    int32 t = Compiler->Constant(AlphaIndex);  // Placeholder for AlphaIndex as parameter t
+    int32 B = Compiler->Constant(0.0f);        // Initialize B for accumulating the B-Spline result
+
+    // Example using cubic B-spline basis; adjust depending on the required control points
+    for (int32 i = -1; i <= 2; ++i)
+    {
+        int32 k = CurrentIndex + i; // Calculate control point index offset
+        if (k < 0 || k >= ColorPoints.Num()) continue; // Skip out-of-bounds control points
+
+        int32 PositionIndex = ColorPoints[k].Position.Expression ? ColorPoints[k].Position.Compile(Compiler) : Compiler->Constant(ColorPoints[k].DefaultPosition);
+        int32 ColorIndex = ColorPoints[k].Color.Expression ? ColorPoints[k].Color.Compile(Compiler) : Compiler->Constant3(ColorPoints[k].DefaultColor.R, ColorPoints[k].DefaultColor.G, ColorPoints[k].DefaultColor.B);
+
+        int32 BasisValue = Compiler->Constant(1.0f);
+        B = Compiler->Add(B, Compiler->Mul(BasisValue, ColorIndex));  // Accumulate weighted color points
+    }
+
+    return Compiler->Clamp(B, Compiler->Constant(0.0f), Compiler->Constant(1.0f));
 }
 
 void UMaterialExpressionColorRamp::GetCaption(TArray<FString>& OutCaptions) const

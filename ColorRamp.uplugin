@@ -4,7 +4,7 @@
 	"VersionName": "1.0",
 	"FriendlyName": "Color Ramp",
 	"Description": "This plugin adds a new material node that allows for smooth blending of multiple color values. The node lets you define key points with specific colors and control their distribution to create various gradients.",
-	"Category": "Other",
+	"Category": "Blueprints",
 	"CreatedBy": "Mox Alehin",
 	"CreatedByURL": "https://github.com/MoxAlehin",
 	"DocsURL": "https://github.com/MoxAlehin/ColorRamp",
