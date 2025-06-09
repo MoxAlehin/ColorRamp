@@ -1,11 +1,11 @@
 // Copyright MoxAlehin. All Rights Reserved.
 
-#include "MaterialExpressionColorRamp.h"
+#include "MaterialExpressionMoxColorRamp.h"
 #include "MaterialCompiler.h"
 
 #define LOCTEXT_NAMESPACE "MaterialExpression"
 
-UMaterialExpressionColorRamp::UMaterialExpressionColorRamp(const FObjectInitializer& ObjectInitializer)
+UMaterialExpressionMoxColorRamp::UMaterialExpressionMoxColorRamp(const FObjectInitializer& ObjectInitializer)
     :   Super(ObjectInitializer),
         ConstAlpha(1.0f), 
         InterpolationType(EInterpolationType::Linear),
@@ -16,7 +16,7 @@ UMaterialExpressionColorRamp::UMaterialExpressionColorRamp(const FObjectInitiali
     MenuCategories.Add(LOCTEXT( "Gradient", "Gradient" ));
 }
 
-void UMaterialExpressionColorRamp::RebuildOutputs()
+void UMaterialExpressionMoxColorRamp::RebuildOutputs()
 {
     Outputs.Reset(1);
     bShowOutputNameOnPin = false;
@@ -25,7 +25,7 @@ void UMaterialExpressionColorRamp::RebuildOutputs()
 
 #if WITH_EDITOR
 
-int32 UMaterialExpressionColorRamp::Compile(FMaterialCompiler* Compiler, int32 OutputIndex)
+int32 UMaterialExpressionMoxColorRamp::Compile(FMaterialCompiler* Compiler, int32 OutputIndex)
 {
     int32 AlphaIndex = Alpha.Expression ? Alpha.Compile(Compiler) : Compiler->Constant(ConstAlpha);
 
@@ -85,7 +85,7 @@ int32 UMaterialExpressionColorRamp::Compile(FMaterialCompiler* Compiler, int32 O
     return Result;
 }
 
-int32 UMaterialExpressionColorRamp::ApplyEaseInOutInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 PrevPositionIndex, int32 PositionIndex)
+int32 UMaterialExpressionMoxColorRamp::ApplyEaseInOutInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 PrevPositionIndex, int32 PositionIndex)
 {
     int32 t = Compiler->Div(Compiler->Sub(AlphaIndex, PrevPositionIndex), Compiler->Sub(PositionIndex, PrevPositionIndex));
     int32 easeInOut = Compiler->Sub(Compiler->Mul(t, t), Compiler->Mul(Compiler->Sub(t, Compiler->Constant(1.0f)), Compiler->Sub(t, Compiler->Constant(1.0f))));
@@ -99,7 +99,7 @@ int32 UMaterialExpressionColorRamp::ApplyEaseInOutInterpolation(FMaterialCompile
 //     return Compiler->Errorf(TEXT("B-Spline interpolation requires at least 4 color points"));
 // }
 
-int32 UMaterialExpressionColorRamp::ApplyBSplineInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 CurrentIndex)
+int32 UMaterialExpressionMoxColorRamp::ApplyBSplineInterpolation(FMaterialCompiler* Compiler, int32 AlphaIndex, int32 CurrentIndex)
 {
     int32 t = Compiler->Constant(AlphaIndex);  // Placeholder for AlphaIndex as parameter t
     int32 B = Compiler->Constant(0.0f);        // Initialize B for accumulating the B-Spline result
@@ -120,12 +120,12 @@ int32 UMaterialExpressionColorRamp::ApplyBSplineInterpolation(FMaterialCompiler*
     return Compiler->Clamp(B, Compiler->Constant(0.0f), Compiler->Constant(1.0f));
 }
 
-void UMaterialExpressionColorRamp::GetCaption(TArray<FString>& OutCaptions) const
+void UMaterialExpressionMoxColorRamp::GetCaption(TArray<FString>& OutCaptions) const
 {
     OutCaptions.Add(TEXT("Color Ramp"));
 }
 
-TArrayView<FExpressionInput*> UMaterialExpressionColorRamp::GetInputsView()
+TArrayView<FExpressionInput*> UMaterialExpressionMoxColorRamp::GetInputsView()
 {
     CachedInputs.Empty();
     CachedInputs.Add(&Alpha);
@@ -172,7 +172,7 @@ TArrayView<FExpressionInput*> UMaterialExpressionColorRamp::GetInputsView()
     return CachedInputs;
 }
 
-FExpressionInput* UMaterialExpressionColorRamp::GetInput(int32 InputIndex)
+FExpressionInput* UMaterialExpressionMoxColorRamp::GetInput(int32 InputIndex)
 {
     if (InputIndex == 0)
     {
@@ -232,11 +232,11 @@ FExpressionInput* UMaterialExpressionColorRamp::GetInput(int32 InputIndex)
     return nullptr;
 }
 
-FName UMaterialExpressionColorRamp::GetInputName(int32 InputIndex) const
+FName UMaterialExpressionMoxColorRamp::GetInputName(int32 InputIndex) const
 {
     if (InputIndex == 0)
     {
-        return GET_MEMBER_NAME_STRING_CHECKED(UMaterialExpressionColorRamp, Alpha);
+        return GET_MEMBER_NAME_STRING_CHECKED(UMaterialExpressionMoxColorRamp, Alpha);
     }
 
     int32 PointIndex;
@@ -292,11 +292,11 @@ FName UMaterialExpressionColorRamp::GetInputName(int32 InputIndex) const
     return NAME_None;
 }
 
-void UMaterialExpressionColorRamp::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+void UMaterialExpressionMoxColorRamp::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
     RebuildOutputs();
 
-    if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, PinType))
+    if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionMoxColorRamp, PinType))
     {
         if (PinType == EPinType::HidePins || 
             PinType == EPinType::ShowPositionPins ||
@@ -319,9 +319,9 @@ void UMaterialExpressionColorRamp::PostEditChangeProperty(FPropertyChangedEvent&
         }
     }
 
-    if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, ColorPoints) ||
-        PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, InterpolationType) ||
-        PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionColorRamp, PinType))
+    if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionMoxColorRamp, ColorPoints) ||
+        PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionMoxColorRamp, InterpolationType) ||
+        PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(UMaterialExpressionMoxColorRamp, PinType))
     {
         if (GraphNode)
         {

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Materials/MaterialExpression.h"
-#include "MaterialExpressionColorRamp.generated.h"
+#include "MaterialExpressionMoxColorRamp.generated.h"
 
 UENUM()
 enum EInterpolationType : uint8
@@ -52,7 +52,7 @@ struct FColorRampPoint
 };
 
 UCLASS(CollapseCategories, HideCategories = Object, MinimalAPI)
-class UMaterialExpressionColorRamp : public UMaterialExpression
+class UMaterialExpressionMoxColorRamp : public UMaterialExpression
 {
     GENERATED_UCLASS_BODY()
 
